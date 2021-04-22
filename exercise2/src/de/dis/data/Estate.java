@@ -74,11 +74,11 @@ public class Estate {
 		this.square_area = square_area;
 	}
 	
-    public Int getAgent() {
+    public Integer getAgent() {
         return agent;
     }
 
-	public void setAgent(Int agent) {
+	public void setAgent(Integer agent) {
 		this.agent = agent;
 	}
 
@@ -109,7 +109,8 @@ public class Estate {
 				ts.setPostal_Code(rs.getPostal_Code("postal_code"));
 				ts.setStreet(rs.getStreet("street"));
 				ts.setStreet_Number(rs.getStreet_Number("street_number"));
-				ts.setSquare_Area(rs)
+				ts.setSquare_Area(rs.getSquare_Area("square_area"));
+				ts.setAgent(rs.getAgent("agent"));
 
 				rs.close();
 				pstmt.close();
@@ -121,56 +122,68 @@ public class Estate {
 		return null;
 	}
 	
-// 	/**
-// 	 * Speichert den Makler in der Datenbank. Ist noch keine ID vergeben
-// 	 * worden, wird die generierte Id von der DB geholt und dem Model übergeben.
-// 	 */
-// 	public void save() {
-// 		// Hole Verbindung
-// 		Connection con = DbConnectionManager.getInstance().getConnection();
+	/**
+			private int id = 1;
+			private String city;
+			private String postal_code;
+			private String street;
+			private String street_number;
+			private float square_area;
+			private int agent;
+	 * Speichert den Makler in der Datenbank. Ist noch keine ID vergeben
+	 * worden, wird die generierte Id von der DB geholt und dem Model übergeben.
+	 */
+	public void save() {
+		// Hole Verbindung
+		Connection con = DbConnectionManager.getInstance().getConnection();
 
-// 		try {
-// 			// FC<ge neues Element hinzu, wenn das Objekt noch keine ID hat.
-// 			if (getId() == -1) {
-// 				// Achtung, hier wird noch ein Parameter mitgegeben,
-// 				// damit spC$ter generierte IDs zurC<ckgeliefert werden!
-// 				String insertSQL = "INSERT INTO makler(name, address, login, password) VALUES (?, ?, ?, ?)";
+		try {
+			// FC<ge neues Element hinzu, wenn das Objekt noch keine ID hat.
+			if (getId() == -1) {
+				// Achtung, hier wird noch ein Parameter mitgegeben,
+				// damit spC$ter generierte IDs zurC<ckgeliefert werden!
+				String insertSQL = "INSERT INTO estate(id, city, postal_code, street, street_number, square_area, agent) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-// 				PreparedStatement pstmt = con.prepareStatement(insertSQL,
-// 						Statement.RETURN_GENERATED_KEYS);
+				PreparedStatement pstmt = con.prepareStatement(insertSQL,
+						Statement.RETURN_GENERATED_KEYS);
 
-// 				// Setze Anfrageparameter und fC<hre Anfrage aus
-// 				pstmt.setString(1, getName());
-// 				pstmt.setString(2, getAddress());
-// 				pstmt.setString(3, getLogin());
-// 				pstmt.setString(4, getPassword());
-// 				pstmt.executeUpdate();
+				// Setze Anfrageparameter und fC<hre Anfrage aus
+				pstmt.setString(1, getId());
+				pstmt.setString(2, getCity());
+				pstmt.setString(3, getPostal_Code());
+				pstmt.setString(4, getStreet());
+				pstmt.setString(5, getStreet_Number());
+				pstmt.setString(6, getSquare_Area());
+				pstmt.setString(7, getAgent());
+				pstmt.executeUpdate();
 
-// 				// Hole die Id des engefC<gten Datensatzes
-// 				ResultSet rs = pstmt.getGeneratedKeys();
-// 				if (rs.next()) {
-// 					setId(rs.getInt(1));
-// 				}
+				// Hole die Id des engefC<gten Datensatzes
+				ResultSet rs = pstmt.getGeneratedKeys();
+				if (rs.next()) {
+					setId(rs.getInt(1));
+				}
 
-// 				rs.close();
-// 				pstmt.close();
-// 			} else {
-// 				// Falls schon eine ID vorhanden ist, mache ein Update...
-// 				String updateSQL = "UPDATE makler SET name = ?, address = ?, login = ?, password = ? WHERE id = ?";
-// 				PreparedStatement pstmt = con.prepareStatement(updateSQL);
+				rs.close();
+				pstmt.close();
+			} else {
+				// Falls schon eine ID vorhanden ist, mache ein Update...
+				String updateSQL = "UPDATE estate SET id = ?, city = ?, postal_code = ?, street = ?, street_number = ?, square_area = ?, agent = ? WHERE id = ?";
+				PreparedStatement pstmt = con.prepareStatement(updateSQL);
 
-// 				// Setze Anfrage Parameter
-// 				pstmt.setString(1, getName());
-// 				pstmt.setString(2, getAddress());
-// 				pstmt.setString(3, getLogin());
-// 				pstmt.setString(4, getPassword());
-// 				pstmt.setInt(5, getId());
-// 				pstmt.executeUpdate();
+				// Setze Anfrage Parameter
+				pstmt.setString(1, getId());
+				pstmt.setString(2, getCity());
+				pstmt.setString(3, getPostal_Code());
+				pstmt.setString(4, getStreet());
+				pstmt.setString(5, getStreet_Number());
+				pstmt.setString(6, getSquare_Area());
+				pstmt.setString(7, getAgent());
+				pstmt.executeUpdate();
 
-// 				pstmt.close();
-// 			}
-// 		} catch (SQLException e) {
-// 			e.printStackTrace();
-// 		}
-// 	}
-// }
+				pstmt.close();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+}
